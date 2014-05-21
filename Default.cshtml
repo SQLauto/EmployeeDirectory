@@ -1,0 +1,20 @@
+﻿@{
+    
+    var db = Database.Open("EmpTest");
+    var querytest = "SELECT * FROM Emp WHERE id=1";
+    var result = db.QuerySingle(querytest);
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>My Site's Title</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    </head>
+    <body>
+        <h1>Name: @result.name</h1>
+    </body>
+</html>
