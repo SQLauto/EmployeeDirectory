@@ -1,5 +1,6 @@
 ﻿@{
-    
+    Layout = "~/_Layout.cshtml";
+
     var db = Database.Open("EmployeeDirectory");
     var querytest = "SELECT * FROM Departments WHERE id=1";
     var result = db.QuerySingle(querytest);
