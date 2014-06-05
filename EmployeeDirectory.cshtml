@@ -5,6 +5,8 @@
     var db = Database.Open("EmployeeDirectory");
     var empQuery = @"SELECT * FROM employees";
     var empResults = db.Query(empQuery);
+
+    
 }
 
 <h1>It's a directory, y'all!</h1>
@@ -14,15 +16,20 @@
         <div class="col-sm-2 col-md-1">
             <img src="#" height="100" width="75" alt="Placeholder" />
         </div>
-        <div class="col-sm-2 col-md-1">
-            <p>Name:</p>
-            <p>DOB:</p>
-            <p>Email:</p>
-        </div>
-        <div class="col-sm-8 col-md-10">
-            <p>@empResult.first_name @empResult.last_name</p>
-            <p>@empResult.birth_date</p>
-            <p>@empResult.email</p>
-        </div>
+        <p>
+            <span class="col-sm-2 col-md-1">Name:</span>
+            <span class="col-sm-8 col-md-10">@empResult.first_name @empResult.last_name</span>
+        </p>
+    @{if(empResult.birth_date != null){
+        <p>
+            <span class="col-sm-2 col-md-1">DOB:</span>
+            <span class="col-sm-8 col-md-10">@empResult.birth_date</span>
+        </p>      
+    }
+    }
+        <p>
+            <span class="col-sm-2 col-md-1">Email:</span>
+            <span class="col-sm-8 col-md-10">@empResult.email</span>
+        </p>    
     </div>
 }
