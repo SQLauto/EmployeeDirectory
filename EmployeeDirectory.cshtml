@@ -3,33 +3,48 @@
     Page.Title = "Employee Directory";
 
     var db = Database.Open("EmployeeDirectory");
-    var empQuery = @"SELECT * FROM employees";
+    var rowQuery = @"SELECT id FROM employees";
+    var rowResults = db.Query(rowQuery);
+
+    var empQuery = @"SELECT e.id,
+                            e.first_name,
+                            e.last_name,
+                            e.birth_date,
+                            e.email 
+                       FROM employees e";
     var empResults = db.Query(empQuery);
 
-    
+    var phonesQuery = @"SELECT e.id,
+	                           pt.name as Type,
+                               p.number
+                          FROM Employees e
+                         INNER JOIN EmployeesPhones ep
+                            ON e.id = ep.employee
+                         INNER JOIN Phones p
+                            ON ep.phone = p.id
+                         INNER JOIN PhonesTypes pt
+                            ON pt.id = p.type";
+    var phonesResults = db.Query(phonesQuery);
 }
 
 <h1>It's a directory, y'all!</h1>
 
 @foreach(var empResult in empResults){
-    <div class="row">
-        <div class="col-sm-2 col-md-1">
-            <img src="#" height="100" width="75" alt="Placeholder" />
-        </div>
-        <p>
-            <span class="col-sm-2 col-md-1">Name:</span>
-            <span class="col-sm-8 col-md-10">@empResult.first_name @empResult.last_name</span>
-        </p>
+    <div>
+        <img src="#" height="100" width="75" alt="Placeholder" />
+        <p>Name: @empResult.first_name @empResult.last_name</p>
+        @{
+            foreach(var phonesResult in phonesResults){
+                if(phonesResult.id == empResult.id){
+        <p>@phonesResult.type - @phonesResult.number</p>
+                }
+            }
+        }
+        <p>Location</p>
     @{if(empResult.birth_date != null){
-        <p>
-            <span class="col-sm-2 col-md-1">DOB:</span>
-            <span class="col-sm-8 col-md-10">@empResult.birth_date</span>
-        </p>      
+        <p>DOB: @empResult.birth_date</p>      
     }
     }
-        <p>
-            <span class="col-sm-2 col-md-1">Email:</span>
-            <span class="col-sm-8 col-md-10">@empResult.email</span>
-        </p>    
+        <p>Email: @empResult.email</p>    
     </div>
 }
