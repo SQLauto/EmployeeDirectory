@@ -3,14 +3,13 @@
     Page.Title = "Employee Directory";
 
     var db = Database.Open("EmployeeDirectory");
-    var rowQuery = @"SELECT id FROM employees";
-    var rowResults = db.Query(rowQuery);
-
+    
     var empQuery = @"SELECT e.id,
                             e.first_name,
                             e.last_name,
                             e.birth_date,
-                            e.email 
+                            e.email,
+                            e.has_certification 
                        FROM employees e";
     var empResults = db.Query(empQuery);
 
@@ -25,25 +24,62 @@
                          INNER JOIN PhonesTypes pt
                             ON pt.id = p.type";
     var phonesResults = db.Query(phonesQuery);
+
+    var locationQuery = @"SELECT e.id,
+	                             l.abbreviation
+                            FROM Employees e
+                           INNER JOIN EmployeesLocations el
+                              ON e.id = el.employee
+                           INNER JOIN Locations l
+                              ON l.id = el.location";
+    var locationsResult = db.Query(locationQuery);
+
+    var titlesQuery = @"SELECT e.id,
+	                           t.name
+                          FROM Employees e
+                         INNER JOIN EmployeesTitles et
+                            ON e.id = et.employee
+                         INNER JOIN Titles t
+                            ON t.id = et.title";
+    var titlesResult = db.Query(titlesQuery);
+
+    var certificationsQuery = @"SELECT e.id,
+	                                   c.abbreviation
+                                  FROM Employees e
+                                 INNER JOIN EmployeesCertifications ec
+                                       ON e.id = ec.employee
+                                 INNER JOIN Certifications c
+                                       ON c.id = ec.certification";
+    var certificationsResult = db.Query(certificationsQuery);
 }
 
 <h1>It's a directory, y'all!</h1>
 
 @foreach(var empResult in empResults){
+    var phones = phonesResults.Where(x => x.id == empResult.id);
+    var locations = locationsResult.Where(x => x.id == empResult.id);
+    var titles = titlesResult.Where(x => x.id == empResult.id);
+    var certifications = certificationsResult.Where(x => x.id == empResult.id);
     <div>
         <img src="#" height="100" width="75" alt="Placeholder" />
         <p>Name: @empResult.first_name @empResult.last_name</p>
-        @{
-            foreach(var phonesResult in phonesResults){
-                if(phonesResult.id == empResult.id){
-        <p>@phonesResult.type - @phonesResult.number</p>
-                }
-            }
-        }
-        <p>Location</p>
-    @{if(empResult.birth_date != null){
+    @foreach(var phone in phones) {
+        <p>@phone.type - @phone.number</p>
+    }
+        <p>Location:  @foreach(var location in locations){
+                @location.abbreviation
+            }</p>
+        <p>Title:  @foreach(var title in titles){
+                @title.name
+            }</p>
+    @if(empResult.birth_date != null){
         <p>DOB: @empResult.birth_date</p>      
     }
+    @if(empResult.has_certification != null){
+        foreach(var certification in certifications){
+        <p>Certification: @certification.abbreviation</p>          
+        }
+        
     }
         <p>Email: @empResult.email</p>    
     </div>
