@@ -60,14 +60,19 @@
     var locations = locationsResult.Where(x => x.id == empResult.id);
     var titles = titlesResult.Where(x => x.id == empResult.id);
     var certifications = certificationsResult.Where(x => x.id == empResult.id);
+    var cert = "";
+    foreach(var certs in certifications){
+        cert = cert + certs.abbreviation + ", ";
+    }
+    var name = empResult.first_name + ' ' + empResult.last_name + ", " + cert;
     <div>
-        <img src="#" height="100" width="75" alt="Placeholder" />
-        <p>Name: @empResult.first_name @empResult.last_name</p>
+        <img src="Images/placeholder.jpg" height="100" width="75" alt="Placeholder" />
+        <p>Name: @name.TrimEnd(',',' ')</p>
     @foreach(var phone in phones) {
         <p>@phone.type - @phone.number</p>
     }
         <p>Location:  @foreach(var location in locations){
-                @location.abbreviation
+                @location.abbreviation<span>, </span> 
             }</p>
         <p>Title:  @foreach(var title in titles){
                 @title.name
