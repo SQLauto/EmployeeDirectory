@@ -56,35 +56,43 @@
 <h1>It's a directory, y'all!</h1>
 
 @foreach(var empResult in empResults){
+    // Sorting result set
     var phones = phonesResults.Where(x => x.id == empResult.id);
     var locations = locationsResult.Where(x => x.id == empResult.id);
     var titles = titlesResult.Where(x => x.id == empResult.id);
     var certifications = certificationsResult.Where(x => x.id == empResult.id);
-    var cert = "";
-    foreach(var certs in certifications){
-        cert = cert + certs.abbreviation + ", ";
+    
+    // Initialize variables for display
+    var displayName = "";
+    var displayCert = "";
+    var displayLocation = "";
+    var displayTitle = "";
+
+    // Combine data for display
+    foreach(var cert in certifications){
+        displayCert += cert.abbreviation + ", ";
     }
-    var name = empResult.first_name + ' ' + empResult.last_name + ", " + cert;
+    displayName = empResult.first_name + " " + empResult.last_name + ", " + displayCert;
+    displayName = displayName.TrimEnd(',',' ');
+    foreach(var location in locations){
+        displayLocation += location.abbreviation + ", ";
+    }
+    displayLocation = displayLocation.TrimEnd(',',' ');
+    foreach(var title in titles){
+        displayTitle += title.name + ", ";
+    }
+    displayTitle = displayTitle.TrimEnd(',',' ');
+    
+    // Display
     <div>
         <img src="Images/placeholder.jpg" height="100" width="75" alt="Placeholder" />
-        <p>Name: @name.TrimEnd(',',' ')</p>
+        <p>@displayName</p>
+        <p>@displayLocation - @displayTitle</p>
     @foreach(var phone in phones) {
-        <p>@phone.type - @phone.number</p>
+        <p>@phone.type: @phone.number</p>
     }
-        <p>Location:  @foreach(var location in locations){
-                @location.abbreviation<span>, </span> 
-            }</p>
-        <p>Title:  @foreach(var title in titles){
-                @title.name
-            }</p>
     @if(empResult.birth_date != null){
         <p>DOB: @empResult.birth_date</p>      
-    }
-    @if(empResult.has_certification != null){
-        foreach(var certification in certifications){
-        <p>Certification: @certification.abbreviation</p>          
-        }
-        
     }
         <p>Email: @empResult.email</p>    
     </div>
