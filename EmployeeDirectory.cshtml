@@ -9,7 +9,8 @@
                             e.last_name,
                             e.birth_date,
                             e.email,
-                            e.has_certification 
+                            e.has_certification,
+                            e.has_picture 
                        FROM employees e";
     var empResults = db.Query(empQuery);
 
@@ -67,7 +68,9 @@
     var displayCert = "";
     var displayLocation = "";
     var displayTitle = "";
-
+    var displayPicUrl="";
+    var displayDob = "";
+    
     // Combine data for display
     foreach(var cert in certifications){
         displayCert += cert.abbreviation + ", ";
@@ -82,18 +85,22 @@
         displayTitle += title.name + ", ";
     }
     displayTitle = displayTitle.TrimEnd(',',' ');
+    displayPicUrl = "Images/";
+    displayPicUrl += empResult.has_picture == true ? empResult.last_name + "_" + empResult.first_name : "placeholder";
+    displayPicUrl += ".jpg";
+    
     
     // Display
     <div>
-        <img src="Images/placeholder.jpg" height="100" width="75" alt="Placeholder" />
+        <img src="@displayPicUrl" height="100" width="75" alt="Placeholder" />
         <p>@displayName</p>
         <p>@displayLocation - @displayTitle</p>
     @foreach(var phone in phones) {
         <p>@phone.type: @phone.number</p>
     }
-    @if(empResult.birth_date != null){
-        <p>DOB: @empResult.birth_date</p>      
+        @if(empResult.birth_date != null){
+        <p>DOB: @empResult.birth_date</p>
     }
-        <p>Email: @empResult.email</p>    
+        <p>Email: @empResult.email</p>
     </div>
 }
