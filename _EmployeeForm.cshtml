@@ -1,0 +1,28 @@
+﻿@{
+    var db = Database.Open("EmployeeDirectory");
+    var locQuery = "SELECT * FROM Locations";
+    var locResults = db.Query(locQuery);
+}
+
+<form role="form" method="post">
+    <div class="form-group">
+        <label for="first_name">First Name</label>
+        <input type="text" class="form-control" name="first_name" id="first_name" />
+    </div>
+    <div class="form-group">
+        <label for="middle_initial">Middle Initial</label>
+        <input type="text" class="form-control" maxlength="1" name="middle_initial" id="middle_initial" />
+    </div>
+    <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input type="text" class="form-control" name="last_name" id="last_name" />
+    </div>
+    <label>Location</label>
+    @foreach(var Loc in locResults){
+    <div class="checkbox">
+        <label>
+            <input type="checkbox"> @Loc.full_name
+        </label>
+    </div>
+    }
+</form>
