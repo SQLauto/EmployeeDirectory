@@ -2,35 +2,60 @@
     var db = Database.Open("EmployeeDirectory");
     var locQuery = "SELECT * FROM Locations";
     var locResults = db.Query(locQuery);
+    var phoneTypesQuery = "SELECT * FROM PhonesTypes";
+    var phoneTypesResults = db.Query(phoneTypesQuery);
 }
 
-<form role="form" method="post">
+<form role="form" class="form-horizontal">
     <div class="form-group">
-        <label for="first_name">First Name</label>
-        <input type="text" class="form-control" name="first_name" id="first_name" />
-    </div>
-    <div class="form-group">
-        <label for="middle_initial">Middle Initial</label>
-        <input type="text" class="form-control" maxlength="1" name="middle_initial" id="middle_initial" />
-    </div>
-    <div class="form-group">
-        <label for="last_name">Last Name</label>
-        <input type="text" class="form-control" name="last_name" id="last_name" />
-    </div>
-    <label>Location</label>
-    @foreach(var Loc in locResults){
-    <div class="checkbox">
-        <label>
-            <input type="checkbox"> @Loc.full_name
-        </label>
-    </div>
-    }
-    <div id="phoneList">
-        <div class="form-group">
-            <label for="phoneNum">Phone Number</label>
-            <input type="text" class="form-control" name="phoneNum" id="phoneNum" />
+        <label for="first_name" class="col-sm-2 control-label">First Name</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="first_name" id="first_name" />
         </div>
-        <a href="#" id="addPhoneNum"><span class="glyphicon glyphicon-plus"></span></a>
     </div>
+    <div class="form-group">
+        <label for="middle_initial" class="col-sm-2 control-label">Middle Initial</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" maxlength="1" name="middle_initial" id="middle_initial" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="last_name" class="col-sm-2 control-label">Last Name</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="last_name" id="last_name" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Location</label>
+        <div class="col-sm-10">
+    @foreach(var Loc in locResults){
+            <div class="checkbox">
+                <input type="checkbox"> @Loc.full_name
+            </div>
+    }
+        </div>
+    </div>
+    <div id="phoneList" class="form-group">
+        <div id="phoneNumber" class="form-group">
+            <label for="phoneNum" class="col-sm-2 control-label">Phone Number</label>
+            <div class="col-sm-2">
+                <select class="form-control" name="phoneNumber">
+                    @foreach(var phoneTypeResult in phoneTypesResults){
+                    <option value="@phoneTypeResult.id">@phoneTypeResult.name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="phone" id="phone" placeholder="(123) 456-7890"/>
+            </div>
+        </div>        
+    </div>
+    <div class="col-sm-offset-2">
+        <a href="#" id="addPhoneNum">
+            <span class="form-indent glyphicon glyphicon-plus"></span>
+        </a>
+    </div>
+    
 </form>
+<button id="submit">Submit</button>
 <script type="text/javascript" src="js/AddPhoneField.js"></script>
